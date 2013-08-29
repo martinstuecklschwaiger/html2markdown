@@ -1,3 +1,26 @@
 {
-	"require": {}
+	"name": "html2markdown",
+	"type": "library",
+	"description": "Convert HTML to Markdown.",
+	"keywords": ["framework", "html", "markdown", "md", "convert"],
+	"homepage": "http://fox21.at/",
+	"license": "GPLv3",
+	
+	"authors": [
+		{
+			"name": "Christian Mayer",
+			"email": "thefox21at@gmail.com",
+			"homepage": "http://fox21.at"
+		}
+	],
+	
+	"require": {
+		"php": ">=5.3.0",
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"HTML2Markdown": "src/"
+		}
+	}
 }
