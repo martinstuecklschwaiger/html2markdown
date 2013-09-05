@@ -147,8 +147,4 @@ class HTML2Markdown{
 		return $this->markdown;
 	}
 	
-	public function test(){
-		print "test\n";
-	}
-	
 }
