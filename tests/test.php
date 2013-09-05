@@ -9,4 +9,4 @@ $html2md->test();
 
 $html2md = new HTML2Markdown(file_get_contents(__DIR__.'/blogpost.html'));
 
-print "markdown: '".$html2md->parse()."'\n";
+print "\n\nmarkdown:\n".$html2md->parse()."\n";
