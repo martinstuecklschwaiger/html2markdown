@@ -111,7 +111,7 @@ class HTML2Markdown{
 				#$trim = true;
 			}
 			elseif($node->nodeName == 'br'){
-				$contentPost = "\n";
+				$contentPost = "  \n";
 			}
 			elseif($node->nodeName == 'html' || $node->nodeName == 'body'){}
 			else{
