@@ -9,6 +9,16 @@ class HTML2Markdown{
 	
 	function __construct($str = ''){
 		$this->html = $str;
+		
+		set_error_handler(function($errno, $errstr, $errfile, $errline){
+			#print "ERROR: ".$errno.", ".$errstr."\n";
+			switch($errno){
+				case 2:
+					print "\nWARNING: ".$errstr."\n\n";
+					exit(1);
+					break;
+			}
+		});
 	}
 	
 	public function parse(){
@@ -21,13 +31,22 @@ class HTML2Markdown{
 			$this->html = str_replace('&#8217;', "'", $this->html);
 			
 			$dom = new \DOMDocument();
-			if($dom->loadHTML($this->html)){
-				#var_export($dom);
-				
-				$rv = $this->parseElement($dom);
-				
+			try{
+				if($dom->loadHTML($this->html)){
+					#var_export($dom);
+					
+					$rv = $this->parseElement($dom);
+					
+				}
+				else{
+					print "ERROR: loadHTML() failed\n";
+					exit(1);
+				}
 			}
-			
+			catch(Exception $e){
+				print "ERROR: ".$e->getMessage()."\n";
+				exit(1);
+			}
 		}
 		
 		#$rv = str_replace(' ', '~', str_replace("\n", "$\n", str_replace("\t", '____', $rv)));
@@ -88,6 +107,7 @@ class HTML2Markdown{
 				$contentPre = '[';
 				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
 			}
+			#elseif($node->nodeName == 'img'){}
 			elseif($node->nodeName == 'pre'){}
 			elseif($node->nodeName == 'code'){
 				if($node->parentNode->nodeName == 'pre'){
@@ -100,9 +120,7 @@ class HTML2Markdown{
 					$contentPost = "`";
 				}
 			}
-			elseif($node->nodeName == 'blockquote'){
-				
-			}
+			
 			elseif($node->nodeName == 'br'){
 				$contentPost = "  \n";
 			}
@@ -141,9 +159,16 @@ class HTML2Markdown{
 				$contentPre = '##### ';
 				$contentPost = "\n";
 			}
-			elseif($node->nodeName == 'html' || $node->nodeName == 'body'){}
+			elseif($node->nodeName == 'del'){
+				$contentPre = '~~';
+				$contentPost = '~~';
+			}
+			elseif($node->nodeName == 'blockquote'){}
+			elseif($node->nodeName == 'span'){}
+			elseif($node->nodeName == 'html' || $node->nodeName == 'meta' || $node->nodeName == 'body'){}
 			else{
-				print "node '".$node->nodeName."' not implemented\n";
+				print "WARNING: node '".$node->nodeName."' not implemented\n";
+				exit(1);
 			}
 		}
 		
