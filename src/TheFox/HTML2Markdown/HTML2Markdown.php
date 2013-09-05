@@ -90,9 +90,15 @@ class HTML2Markdown{
 			}
 			elseif($node->nodeName == 'pre'){}
 			elseif($node->nodeName == 'code'){
-				$contentPost = "\n\n";
-				$contentPre = "\t";
-				$contentPreAllLines = "\t";
+				if($node->parentNode->nodeName == 'pre'){
+					$contentPre = "\t";
+					$contentPreAllLines = "\t";
+					$contentPost = "\n\n";
+				}
+				else{
+					$contentPre = "`";
+					$contentPost = "`";
+				}
 			}
 			elseif($node->nodeName == 'blockquote'){
 				
