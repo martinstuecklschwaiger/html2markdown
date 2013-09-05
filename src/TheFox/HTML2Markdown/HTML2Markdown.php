@@ -121,6 +121,26 @@ class HTML2Markdown{
 				}
 				$contentPost = "\n";
 			}
+			elseif($node->nodeName == 'h1'){
+				$contentPre = '# ';
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'h2'){
+				$contentPre = '## ';
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'h3'){
+				$contentPre = '### ';
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'h4'){
+				$contentPre = '#### ';
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'h5'){
+				$contentPre = '##### ';
+				$contentPost = "\n";
+			}
 			elseif($node->nodeName == 'html' || $node->nodeName == 'body'){}
 			else{
 				print "node '".$node->nodeName."' not implemented\n";
