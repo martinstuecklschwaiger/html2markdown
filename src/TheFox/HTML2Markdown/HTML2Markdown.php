@@ -27,7 +27,7 @@ class HTML2Markdown{
 			
 		}
 		
-		print "markdown:\n$rv\n";
+		print "\n\nmarkdown:\n$rv\n";
 		
 		
 		exit();
@@ -37,12 +37,14 @@ class HTML2Markdown{
 	
 	public function parseElement($node, $level = 0){
 		$rv = '';
+		$contentPre = '';
 		$content = '';
+		$contentPost = '';
 		
 		#print "parseElement\n";
-		print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType."\n";
-		print "\t '".$node->nodeValue."'\n";
-		print "\t '".$node->textContent."'\n";
+		#print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath()."\n";
+		#print "\t '".$node->nodeValue."'\n";
+		#print "\t '".$node->textContent."'\n";
 		#sleep(1);
 		
 		#var_export($node->childNodes);print "\n";print "\n";
@@ -50,24 +52,43 @@ class HTML2Markdown{
 		
 		if($node->nodeType == XML_TEXT_NODE){
 			$content = $node->wholeText;
-			$content = preg_replace('/\n+$/', ' ', $content);
+			$content = preg_replace('/\n+/', ' ', $content);
 		}
 		elseif($node->nodeType == XML_ELEMENT_NODE){
 			
+			#print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath()."\n";
+			
+			if($node->nodeName == 'p'){
+				$contentPost = "\n\n";
+			}
+			elseif($node->nodeName == 'i' || $node->nodeName == 'em'){
+				$contentPre = '*';
+				$contentPost = '*';
+			}
+			elseif($node->nodeName == 'b' || $node->nodeName == 'strong'){
+				$contentPre = '**';
+				$contentPost = '**';
+			}
+			elseif($node->nodeName == 'a'){
+				print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath()."\n";
+				
+				var_export($node->childNodes);print "\n\n";
+				
+				$contentPre = '[';
+				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
+			}
+			else{
+				#print "node '".$node->nodeName."' not implemented\n";
+			}
 		}
-		
-		$content = preg_replace('/ +/', ' ', $content);
-		print "\t '".$content."'\n\n";
-		
-		$rv .= $content;
-		
-		print "\n";print "\n";
 		
 		if($node->hasChildNodes()){
 			foreach($node->childNodes as $node){
-				$rv .= $this->parseElement($node, $level + 1);
+				$content .= $this->parseElement($node, $level + 1);
 			}
 		}
+		
+		$rv .= $contentPre.$content.$contentPost;
 		
 		return $rv;
 	}
