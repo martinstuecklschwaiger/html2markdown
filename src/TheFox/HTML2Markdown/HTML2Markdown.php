@@ -23,7 +23,7 @@ class HTML2Markdown{
 	
 	public function parse(){
 		
-		$rv = '';
+		$markdown = '';
 		
 		if($this->html){
 			
@@ -35,7 +35,7 @@ class HTML2Markdown{
 				if($dom->loadHTML($this->html)){
 					#var_export($dom);
 					
-					$rv = $this->parseElement($dom);
+					$markdown = $this->parseElement($dom);
 					
 				}
 				else{
@@ -49,15 +49,17 @@ class HTML2Markdown{
 			}
 		}
 		
-		#$rv = str_replace(' ', '~', str_replace("\n", "$\n", str_replace("\t", '____', $rv)));
+		$markdown = str_replace("\n\n --- ", "\n\n---\n\n", $markdown);
 		
-		#print "\n\nmarkdown:\n$rv\n";exit();
+		#$markdown = str_replace(' ', '~', str_replace("\n", "$\n", str_replace("\t", '____', $markdown)));
 		
-		#file_put_contents('test.md', $rv); system('killall Mou &> /dev/null; open test.md');
+		#print "\n\nmarkdown:\n$markdown\n";exit();
 		
-		$this->setMarkdown($rv);
+		#file_put_contents('test.md', $markdown); system('killall Mou &> /dev/null; open test.md');
 		
-		return $rv;
+		$this->setMarkdown($markdown);
+		
+		return $markdown;
 	}
 	
 	public function parseElement($node){
@@ -108,7 +110,14 @@ class HTML2Markdown{
 				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
 			}
 			#elseif($node->nodeName == 'img'){}
-			elseif($node->nodeName == 'pre'){}
+			elseif($node->nodeName == 'pre'){
+				#print "pre found: ".(int)( $node->firstChild->nodeName != 'code' )."\n";
+				if($node->firstChild->nodeName != 'code'){
+					$contentPre = "\t";
+					$contentPreAllLines = "\t";
+					$contentPost = "\n\n";
+				}
+			}
 			elseif($node->nodeName == 'code'){
 				if($node->parentNode->nodeName == 'pre'){
 					$contentPre = "\t";
@@ -165,10 +174,11 @@ class HTML2Markdown{
 			}
 			elseif($node->nodeName == 'blockquote'){}
 			elseif($node->nodeName == 'span'){}
+			elseif($node->nodeName == 'tt'){}
 			elseif($node->nodeName == 'html' || $node->nodeName == 'meta' || $node->nodeName == 'body'){}
 			else{
 				print "WARNING: node '".$node->nodeName."' not implemented\n";
-				exit(1);
+				#exit(1);
 			}
 		}
 		
