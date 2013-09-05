@@ -29,20 +29,19 @@ class HTML2Markdown{
 			
 		}
 		
-		#$rv = str_replace(' ', '.', $rv);
-		#$rv = str_replace("\n", "$\n", $rv);
-		print "\n\nmarkdown:\n$rv\n";
+		#$rv = str_replace(' ', '.', $rv);$rv = str_replace("\n", "$\n", $rv);
+		
+		#print "\n\nmarkdown:\n$rv\n";exit();
 		
 		#file_put_contents('test.md', $rv); system('killall Mou &> /dev/null; open test.md');
 		
-		exit();
+		
 		
 		return $this->getMarkdown();
 	}
 	
-	public function parseElement($node, $level = 0, $indent = 0, $contentParentPre = ''){
+	public function parseElement($node, $level = 0, $indent = 0){
 		$rv = '';
-		$contentParentPreNew = '';
 		$contentPre = '';
 		$contentPreAllLines = '';
 		$content = '';
@@ -54,11 +53,6 @@ class HTML2Markdown{
 		#print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath().", ".$node->parentNode->nodeName."\n";
 		#print "\t '".$node->nodeValue."'\n";
 		#print "\t '".$node->textContent."'\n";
-		#sleep(1);
-		
-		#var_export($node->childNodes);print "\n";
-		#print "\n";
-		#return;
 		
 		if($node->nodeType == XML_TEXT_NODE){
 			$content = $node->wholeText;
@@ -70,20 +64,16 @@ class HTML2Markdown{
 			}
 			
 			#if($content){ print "\t '".$content."'\n"; }
-			
 		}
 		elseif($node->nodeType == XML_ELEMENT_NODE){
-			
 			#print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath()."\n";
 			
 			if($node->nodeName == 'p'){
-				#print "node: ".$node->nodeName."\n";
 				if($node->parentNode->nodeName == 'blockquote'){
 					$contentPre = '> ';
 					$contentPreAllLines = '> ';
 				}
 				$contentPost = "\n\n";
-				#$trim = true;
 			}
 			elseif($node->nodeName == 'i' || $node->nodeName == 'em'){
 				$contentPre .= '*';
@@ -97,18 +87,15 @@ class HTML2Markdown{
 				$contentPre .= '[';
 				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
 			}
+			elseif($node->nodeName == 'pre'){}
 			elseif($node->nodeName == 'code'){
 				$contentPost = "\n\n";
-				#$trim = true;
 				$indentNew++;
-				#$contentParentPreNew = "\t";
 				$contentPre = "\t";
 				$contentPreAllLines = "\t";
 			}
 			elseif($node->nodeName == 'blockquote'){
-				#$contentParentPreNew = '> ';
-				#print "node: ".get_class($node).", ".$node->nodeName.", ".$node->nodeType.", ".$node->getNodePath()."\n";
-				#$trim = true;
+				
 			}
 			elseif($node->nodeName == 'br'){
 				$contentPost = "  \n";
@@ -121,19 +108,14 @@ class HTML2Markdown{
 		
 		if($node->hasChildNodes()){
 			foreach($node->childNodes as $node){
-				$content .= $this->parseElement($node, $level + 1, $indent + $indentNew, $contentParentPre.$contentParentPreNew);
+				$content .= $this->parseElement($node, $level + 1, $indent + $indentNew);
 			}
 		}
 		
 		if($trim){ $content = trim($content); }
 		
-		#if($contentParentPre){ $content = str_replace("\n", "\n".$contentParentPre, $content); }
-		
-		
 		if($contentPreAllLines){ $content = str_replace("\n", "\n".$contentPreAllLines, $content); }
 		
-		
-		#$rv .= $contentParentPre;
 		$rv .= $contentPre.$content.$contentPost;
 		
 		return $rv;
