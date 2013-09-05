@@ -109,7 +109,11 @@ class HTML2Markdown{
 				$contentPre = '[';
 				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
 			}
-			#elseif($node->nodeName == 'img'){}
+			elseif($node->nodeName == 'img'){
+				$contentPre = '![';
+				$content = $node->hasAttribute('alt') ? $node->getAttribute('alt') : '';
+				$contentPost = ']('.$node->getAttribute('src').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
+			}
 			elseif($node->nodeName == 'pre'){
 				#print "pre found: ".(int)( $node->firstChild->nodeName != 'code' )."\n";
 				if($node->firstChild->nodeName != 'code'){
