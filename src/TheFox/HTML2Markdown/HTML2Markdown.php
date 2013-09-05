@@ -17,6 +17,7 @@ class HTML2Markdown{
 		
 		if($this->html){
 			
+			$this->html = str_replace("\r", '', $this->html);
 			$this->html = str_replace('&#8217;', "'", $this->html);
 			
 			$dom = new \DOMDocument();
@@ -29,24 +30,23 @@ class HTML2Markdown{
 			
 		}
 		
-		#$rv = str_replace(' ', '.', $rv);$rv = str_replace("\n", "$\n", $rv);
+		#$rv = str_replace(' ', '~', str_replace("\n", "$\n", str_replace("\t", '____', $rv)));
 		
 		#print "\n\nmarkdown:\n$rv\n";exit();
 		
 		#file_put_contents('test.md', $rv); system('killall Mou &> /dev/null; open test.md');
 		
+		$this->setMarkdown($rv);
 		
-		
-		return $this->getMarkdown();
+		return $rv;
 	}
 	
-	public function parseElement($node, $level = 0, $indent = 0){
+	public function parseElement($node){
 		$rv = '';
 		$contentPre = '';
 		$contentPreAllLines = '';
 		$content = '';
 		$contentPost = '';
-		$indentNew = 0;
 		$trim = false;
 		
 		#print "parseElement\n";
@@ -59,6 +59,7 @@ class HTML2Markdown{
 			
 			if($node->parentNode->nodeName != 'code' && $node->parentNode->nodeName != 'pre'){
 				$content = preg_replace('/\n+/', ' ', $content);
+				$content = preg_replace('/\t+/', ' ', $content);
 				$content = preg_replace('/ +/', ' ', $content);
 				$content = preg_replace('/^ +$/', '', $content);
 			}
@@ -76,21 +77,20 @@ class HTML2Markdown{
 				$contentPost = "\n\n";
 			}
 			elseif($node->nodeName == 'i' || $node->nodeName == 'em'){
-				$contentPre .= '*';
+				$contentPre = '*';
 				$contentPost = '*';
 			}
 			elseif($node->nodeName == 'b' || $node->nodeName == 'strong'){
-				$contentPre .= '**';
+				$contentPre = '**';
 				$contentPost = '**';
 			}
 			elseif($node->nodeName == 'a'){
-				$contentPre .= '[';
+				$contentPre = '[';
 				$contentPost = ']('.$node->getAttribute('href').($node->hasAttribute('title') ? ' "'.$node->getAttribute('title').'"' : '').')';
 			}
 			elseif($node->nodeName == 'pre'){}
 			elseif($node->nodeName == 'code'){
 				$contentPost = "\n\n";
-				$indentNew++;
 				$contentPre = "\t";
 				$contentPreAllLines = "\t";
 			}
@@ -100,6 +100,21 @@ class HTML2Markdown{
 			elseif($node->nodeName == 'br'){
 				$contentPost = "  \n";
 			}
+			elseif($node->nodeName == 'ul'){
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'ol'){
+				$contentPost = "\n";
+			}
+			elseif($node->nodeName == 'li'){
+				if($node->parentNode->nodeName == 'ul'){
+					$contentPre = '- ';
+				}
+				elseif($node->parentNode->nodeName == 'ol'){
+					$contentPre = '1. ';
+				}
+				$contentPost = "\n";
+			}
 			elseif($node->nodeName == 'html' || $node->nodeName == 'body'){}
 			else{
 				print "node '".$node->nodeName."' not implemented\n";
@@ -108,7 +123,7 @@ class HTML2Markdown{
 		
 		if($node->hasChildNodes()){
 			foreach($node->childNodes as $node){
-				$content .= $this->parseElement($node, $level + 1, $indent + $indentNew);
+				$content .= $this->parseElement($node);
 			}
 		}
 		
