@@ -1,6 +1,6 @@
 <?php
 
-namespace TheFox\HTML2Markdown;
+namespace TheFox\HTML;
 
 class HTML2Markdown{
 	
