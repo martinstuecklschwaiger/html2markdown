@@ -100,6 +100,7 @@ class HTML2Markdown{
             elseif($node->nodeName == 'div') {
                 $contentPre = PHP_EOL . '<div>';
                 $contentPost = '</div>' . PHP_EOL;
+                $trim = true;
             }
 			elseif($node->nodeName == 'i' || $node->nodeName == 'em'){
 				$contentPre = '*';
