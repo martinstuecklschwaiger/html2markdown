@@ -1,0 +1,7 @@
+<phpunit colors="true" backupGlobals="false">
+    <testsuites>
+        <testsuite name="html2md test suite">
+            <directory>spec/unit</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
