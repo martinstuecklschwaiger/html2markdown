@@ -31,6 +31,10 @@ This software is in [pre-alpha stage](http://en.wikipedia.org/wiki/Software_rele
 
 Browse for more packages on [Packagist](https://packagist.org).
 
+## Contributors
+- Christian Mayer <thefox21at@gmail.com>
+- Mirko Bonadei <mirko.bonadei@gmail.com>
+
 ## Markdown documentation
 [http://daringfireball.net/projects/markdown/][md]
 
