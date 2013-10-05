@@ -3,7 +3,6 @@ PHP class for converting HTML to [Markdown][md].
 
 [![Build Status](https://travis-ci.org/TheFox/html2markdown.png?branch=master)](https://travis-ci.org/TheFox/html2markdown)
 [![Latest Stable Version](https://poser.pugx.org/TheFox/html2markdown/v/stable.png)](https://packagist.org/packages/TheFox/html2markdown)
-[![Latest Unstable Version](https://poser.pugx.org/TheFox/html2markdown/v/unstable.png)](https://packagist.org/packages/TheFox/html2markdown)
 [![Total Downloads](https://poser.pugx.org/TheFox/html2markdown/downloads.png)](https://packagist.org/packages/TheFox/html2markdown)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/TheFox/html2markdown/badges/quality-score.png?s=9e5f4149d4e3ae3d0250fd9a13b56060a775513e)](https://scrutinizer-ci.com/g/TheFox/html2markdown/)
 
