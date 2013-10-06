@@ -1,6 +1,7 @@
 {
 	"name": "thefox/html2markdown",
 	"description": "Convert HTML to Markdown.",
+	"keywords": ["Markdown", "HTML", "Converter"],
 	"license": "GPLv3",
 	"authors": [
 		{
