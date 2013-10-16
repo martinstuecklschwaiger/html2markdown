@@ -14,7 +14,7 @@ tools:
                 no_trailing_whitespace: true
                 naming:
                     enabled: true
-                    local_variable: '^[a-z][a-zA-Z0-9]*$',
+                    local_variable: '^[a-z][a-zA-Z0-9]*$'
                     abstract_class_name: ^Abstract|Factory$
                     utility_class_name: 'Utils?$'
                     constant_name: '^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$'
