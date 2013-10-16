@@ -1,8 +1,8 @@
 <?php
 
-namespace TheFox\HTML;
+namespace TheFox\Html;
 
-class HTML2Markdown{
+class Html2Markdown {
 	
 	private $html = '';
 	private $markdown = '';
