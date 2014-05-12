@@ -20,7 +20,7 @@ This software is in [pre-alpha stage](http://en.wikipedia.org/wiki/Software_rele
 	``` json
 	{
 		"require": {
-			"thefox/html2markdown": ">=0.1.0"
+			"thefox/html2markdown": "0.2.*"
 		}
 	}
 	```
